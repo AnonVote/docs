@@ -201,4 +201,4 @@ For auditors reviewing an AnonVote deployment:
 
 ---
 
-_This document is a living spec. For discussion and amendments, open an issue or pull request in [AnonVote/protocol](https://github.com/AnonVote/protocol)._
+_This document is a living spec. For discussion and amendments, open an issue or pull request in [AnonVote/docs](https://github.com/AnonVote/docs)._

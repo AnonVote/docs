@@ -20,15 +20,15 @@ This repo is the canonical source of truth for how AnonVote works — the crypto
 
 ## Contents
 
-| Document                                               | Description                                                                  |
-| ------------------------------------------------------ | ---------------------------------------------------------------------------- |
-| [`whitepaper/whitepaper.md`](whitepaper/whitepaper.md) | Full protocol whitepaper — privacy model, cryptographic design, threat model |
-| [`specs/crypto.md`](specs/crypto.md)                   | Cryptographic primitive specifications                                       |
-| [`specs/crypto-integration-guide.md`](specs/crypto-integration-guide.md) | Formal integration guide for composing `@anonvote/crypto` safely |
-| [`specs/token-flow.md`](specs/token-flow.md)           | Token issuance and vote submission flow                                      |
-| [`specs/smart-contracts.md`](specs/smart-contracts.md) | On-chain audit contract specification                                        |
-| [`specs/api.md`](specs/api.md)                         | REST API surface specification                                               |
-| [`specs/errors.md`](specs/errors.md)                   | Language-agnostic protocol error code specification                          |
+| Document                                                                 | Description                                                                  |
+| ------------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
+| [`whitepaper/whitepaper.md`](whitepaper/whitepaper.md)                   | Full protocol whitepaper — privacy model, cryptographic design, threat model |
+| [`specs/crypto.md`](specs/crypto.md)                                     | Cryptographic primitive specifications                                       |
+| [`specs/crypto-integration-guide.md`](specs/crypto-integration-guide.md) | Formal integration guide for composing `@anonvote/crypto` safely             |
+| [`specs/token-flow.md`](specs/token-flow.md)                             | Token issuance and vote submission flow                                      |
+| [`specs/smart-contracts.md`](specs/smart-contracts.md)                   | On-chain audit contract specification                                        |
+| [`specs/api.md`](specs/api.md)                                           | REST API surface specification                                               |
+| [`specs/errors.md`](specs/errors.md)                                     | Language-agnostic protocol error code specification                          |
 
 ---
 
@@ -37,8 +37,8 @@ This repo is the canonical source of truth for how AnonVote works — the crypto
 Clone and read:
 
 ```bash
-git clone https://github.com/AnonVote/protocol.git
-cd protocol
+git clone https://github.com/AnonVote/docs.git
+cd docs
 ```
 
 All documents are plain Markdown. No build step required.

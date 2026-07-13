@@ -88,6 +88,7 @@ stellar keys generate --testnet
 ```
 
 This outputs:
+
 ```
 Public Key:  GXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 Secret Key:  SXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -101,12 +102,14 @@ https://developers.stellar.org/guides/get-started/create-account
 Set environment variables for your target network:
 
 **For Testnet:**
+
 ```bash
 export STELLAR_NETWORK="testnet"
 export STELLAR_RPC_URL="https://soroban-testnet.stellar.org"
 ```
 
 **For Mainnet:**
+
 ```bash
 export STELLAR_NETWORK="mainnet"
 export STELLAR_RPC_URL="https://rpc.stellar.org"
@@ -132,12 +135,14 @@ cargo build --target wasm32-unknown-unknown --release
 This compiles the Rust contract code to a `.wasm` file that runs on Soroban.
 
 **Build output:**
+
 ```
-Compiling anonvote v0.1.0 
+Compiling anonvote v0.1.0
 Finished `release` profile [optimized] target(s) in 2.34s
 ```
 
 **Output file location:**
+
 ```
 target/wasm32-unknown-unknown/release/anonvote.wasm
 ```
@@ -151,11 +156,13 @@ ls -lh target/wasm32-unknown-unknown/release/anonvote.wasm
 ```
 
 Output example:
+
 ```
 -rw-r--r-- 1 user staff 150K Jun 17 2026 target/wasm32-unknown-unknown/release/anonvote.wasm
 ```
 
 **What to verify:**
+
 - File exists at the path above
 - File size is ~150 KB (not 0 bytes)
 - File modification time is recent
@@ -169,6 +176,7 @@ sha256sum target/wasm32-unknown-unknown/release/anonvote.wasm
 ```
 
 Example output:
+
 ```
 a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1  anonvote.wasm
 ```
@@ -191,6 +199,7 @@ stellar contract deploy \
 ```
 
 **Expected output:**
+
 ```
 Contract deployed successfully
 
@@ -228,6 +237,7 @@ stellar contract invoke \
 ```
 
 **Expected output:**
+
 ```
 Invoking contract method initialize...
 Simulation succeeded
@@ -298,6 +308,7 @@ stellar contract info \
 ```
 
 Output includes:
+
 ```
 Code Hash: a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1
 ```
@@ -370,7 +381,7 @@ In `sorobanService.ts`:
 ```typescript
 const config: SorobanConfig = {
   stellarSecretKey: process.env.SOROBAN_SECRET_KEY,
-  stellarNetwork: process.env.SOROBAN_NETWORK as 'testnet' | 'mainnet',
+  stellarNetwork: process.env.SOROBAN_NETWORK as "testnet" | "mainnet",
   contractId: process.env.SOROBAN_CONTRACT_ID,
 };
 
@@ -385,14 +396,15 @@ const config: SorobanConfig = {
 
 If you redeploy the contract (e.g., due to a bug fix), here is what changes and what persists:
 
-| Item | On Redeployment |
-|------|-----------------|
-| **Contract ID** | Changes — new deployment = new ID |
+| Item                        | On Redeployment                                                    |
+| --------------------------- | ------------------------------------------------------------------ |
+| **Contract ID**             | Changes — new deployment = new ID                                  |
 | **Existing ballot records** | **Lost** — each contract deployment is a separate storage instance |
-| **Transaction history** | Persists on Stellar — all manageData operations are immutable |
-| **core configuration** | Must update `SOROBAN_CONTRACT_ID` in `.env` to new ID |
+| **Transaction history**     | Persists on Stellar — all manageData operations are immutable      |
+| **core configuration**      | Must update `SOROBAN_CONTRACT_ID` in `.env` to new ID              |
 
 ⚠️ **Redeployment creates a new contract instance with empty storage.** This means:
+
 - Previous ballot records are no longer queryable via the contract
 - Transaction history remains on Stellar via `manageData` operations
 - core must be updated to use the new contract ID
@@ -414,11 +426,13 @@ If you redeploy the contract (e.g., due to a bug fix), here is what changes and 
 This section is designed for voters who want to verify their election result directly from the Stellar blockchain without relying on AnonVote's servers.
 
 **What you'll verify:**
+
 - The final tally published on-chain
 - The transaction hash shown on the public results page matches the Stellar ledger
 - The vote count is consistent (tokens issued == votes cast)
 
 **What you need:**
+
 - The ballot ID (provided by AnonVote)
 - Optional: A Stellar wallet or public account to perform queries
 - Access to Horizon API or Stellar Laboratory (public, free tools)
@@ -426,6 +440,7 @@ This section is designed for voters who want to verify their election result dir
 ### Step 1: Get the Ballot Information
 
 AnonVote's public results page displays:
+
 - **Ballot ID** (example: `550e8400-e29b-41d4-a716-446655440000`)
 - **Result transaction ID** (example: `abc123def456ghi789jkl012mno345...`)
 - **Tally** (example: `Option A: 512 votes, Option B: 488 votes`)
@@ -444,6 +459,7 @@ curl "https://horizon-testnet.stellar.org/transactions/abc123def456ghi789jkl012m
 ```
 
 Replace:
+
 - `abc123def456...` with the result transaction ID
 - `horizon-testnet` with `horizon-public.stellar.org` if mainnet
 
@@ -451,7 +467,7 @@ Replace:
 
 ```json
 {
-  "_links": { },
+  "_links": {},
   "_embedded": {
     "records": [
       {
@@ -502,6 +518,7 @@ stellar contract invoke \
 ```
 
 Output:
+
 ```
 true  ← All tokens that were issued resulted in votes
 ```
@@ -527,6 +544,7 @@ curl "https://horizon-testnet.stellar.org/transactions/96c94e0b937c21d6a5c4b7f2e
 ```
 
 Output:
+
 ```json
 {
   "type": "manage_data",
@@ -544,6 +562,7 @@ echo "Decoded hash: $decoded"
 ```
 
 Output:
+
 ```
 Decoded hash: a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1
 ```
@@ -551,6 +570,7 @@ Decoded hash: a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1
 #### Step 3: Compare with Results Page
 
 The results page displays:
+
 ```
 Result Hash: a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1
 ```
@@ -610,9 +630,9 @@ function getRpcServer(network: string): StellarSdk.SorobanRpc.Server {
 
 ```typescript
 export interface SorobanConfig {
-  stellarSecretKey: string;           // Secret key for signing transactions
+  stellarSecretKey: string; // Secret key for signing transactions
   stellarNetwork: "testnet" | "mainnet"; // Target network
-  contractId: string;                  // Contract ID from deployment
+  contractId: string; // Contract ID from deployment
 }
 ```
 
@@ -636,16 +656,17 @@ When core calls `sorobanRecordBallot()`:
 
 The `AnonVote/core` backend reads configuration from environment variables. Set all of the following in `backend/.env`:
 
-| Variable | Format | Required | Description |
-|----------|--------|----------|-------------|
-| `SOROBAN_NETWORK` | `testnet` or `mainnet` | ✓ Yes | Target Stellar network |
-| `SOROBAN_CONTRACT_ID` | Contract ID (starts with `C`) | ✓ Yes | Deployed contract ID from deployment step |
-| `SOROBAN_RPC_URL` | Full HTTPS URL | ✓ Yes | Soroban RPC endpoint |
-| `SOROBAN_SECRET_KEY` | Secret key (starts with `S`) | ✓ Yes | Admin account secret key for signing contract calls |
+| Variable              | Format                        | Required | Description                                         |
+| --------------------- | ----------------------------- | -------- | --------------------------------------------------- |
+| `SOROBAN_NETWORK`     | `testnet` or `mainnet`        | ✓ Yes    | Target Stellar network                              |
+| `SOROBAN_CONTRACT_ID` | Contract ID (starts with `C`) | ✓ Yes    | Deployed contract ID from deployment step           |
+| `SOROBAN_RPC_URL`     | Full HTTPS URL                | ✓ Yes    | Soroban RPC endpoint                                |
+| `SOROBAN_SECRET_KEY`  | Secret key (starts with `S`)  | ✓ Yes    | Admin account secret key for signing contract calls |
 
 #### Example Configuration
 
 **Testnet:**
+
 ```bash
 SOROBAN_NETWORK=testnet
 SOROBAN_CONTRACT_ID=CA7QYNF63GQ2TLRJJQ4P6OQQC7TSCIB3UOHPHVQ4J6VGXM5LTBQQCTZ
@@ -654,6 +675,7 @@ SOROBAN_SECRET_KEY=SXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
 **Mainnet:**
+
 ```bash
 SOROBAN_NETWORK=mainnet
 SOROBAN_CONTRACT_ID=CBXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -668,17 +690,23 @@ In `core/backend/config.ts` (or equivalent):
 ```typescript
 const sorobanConfig: SorobanConfig = {
   stellarSecretKey: process.env.SOROBAN_SECRET_KEY || "",
-  stellarNetwork: (process.env.SOROBAN_NETWORK || "testnet") as "testnet" | "mainnet",
+  stellarNetwork: (process.env.SOROBAN_NETWORK || "testnet") as
+    | "testnet"
+    | "mainnet",
   contractId: process.env.SOROBAN_CONTRACT_ID || "",
 };
 
 // Validate required variables at startup
 if (!sorobanConfig.contractId) {
-  console.warn("[Soroban] SOROBAN_CONTRACT_ID not set — contract calls disabled");
+  console.warn(
+    "[Soroban] SOROBAN_CONTRACT_ID not set — contract calls disabled",
+  );
 }
 
 if (!sorobanConfig.stellarSecretKey) {
-  console.warn("[Soroban] SOROBAN_SECRET_KEY not set — contract calls disabled");
+  console.warn(
+    "[Soroban] SOROBAN_SECRET_KEY not set — contract calls disabled",
+  );
 }
 ```
 
@@ -686,16 +714,16 @@ if (!sorobanConfig.stellarSecretKey) {
 
 ### Testnet vs Mainnet Configuration Differences
 
-| Component | Testnet | Mainnet |
-|-----------|---------|---------|
-| **Network name** | `testnet` | `mainnet` |
-| **RPC endpoint** | `https://soroban-testnet.stellar.org` | `https://rpc.stellar.org` |
-| **Network passphrase** | `Test SDF Network ; September 2015` | `Public Global Stellar Network ; September 2015` |
-| **Contract ID** | Starts with `T` | Starts with `C` |
-| **Account funding** | Free from faucet | Requires real XLM |
-| **Block time** | ~5 seconds | ~5 seconds |
-| **Cost per deployment** | Free (testnet XLM) | ~1-10 XLM per deployment |
-| **When to use** | Development, testing, demos | Production, real elections |
+| Component               | Testnet                               | Mainnet                                          |
+| ----------------------- | ------------------------------------- | ------------------------------------------------ |
+| **Network name**        | `testnet`                             | `mainnet`                                        |
+| **RPC endpoint**        | `https://soroban-testnet.stellar.org` | `https://rpc.stellar.org`                        |
+| **Network passphrase**  | `Test SDF Network ; September 2015`   | `Public Global Stellar Network ; September 2015` |
+| **Contract ID**         | Starts with `T`                       | Starts with `C`                                  |
+| **Account funding**     | Free from faucet                      | Requires real XLM                                |
+| **Block time**          | ~5 seconds                            | ~5 seconds                                       |
+| **Cost per deployment** | Free (testnet XLM)                    | ~1-10 XLM per deployment                         |
+| **When to use**         | Development, testing, demos           | Production, real elections                       |
 
 **Configuration checklist:**
 
@@ -720,7 +748,8 @@ let attempts = 0;
 
 // Poll up to 10 times, waiting 1.5 seconds between attempts
 while (
-  getResult.status === StellarSdk.SorobanRpc.Api.GetTransactionStatus.NOT_FOUND &&
+  getResult.status ===
+    StellarSdk.SorobanRpc.Api.GetTransactionStatus.NOT_FOUND &&
   attempts < 10
 ) {
   await new Promise((r) => setTimeout(r, 1500));
@@ -732,6 +761,7 @@ while (
 ```
 
 **Behavior:**
+
 - Submits transaction once
 - Polls Stellar RPC for result up to 10 times
 - Waits 1.5 seconds between polls
@@ -743,22 +773,22 @@ When a contract call fails, the service returns:
 
 ```typescript
 export interface SorobanInvokeResult {
-  txHash: string;      // Transaction hash, or "" if failed
-  success: boolean;    // true if contract call succeeded
+  txHash: string; // Transaction hash, or "" if failed
+  success: boolean; // true if contract call succeeded
   returnValue?: unknown; // Return value from contract (if applicable)
 }
 ```
 
 **Failure modes and what core receives:**
 
-| Failure | txHash | success | Returned to core |
-|---------|--------|---------|------------------|
-| **No secret key configured** | `""` | `false` | Warning logged, no retry |
-| **No contract ID configured** | `""` | `false` | Warning logged, no retry |
-| **Simulation fails** | `""` | `false` | Error logged, ballot not recorded on-chain |
-| **Send fails (invalid tx)** | `""` | `false` | Error logged, transaction not submitted |
-| **Timeout (>15 seconds)** | `txHash` | `false` | Tx may have succeeded; check manually |
-| **Success** | `txHash` | `true` | Transaction hash returned for audit trail |
+| Failure                       | txHash   | success | Returned to core                           |
+| ----------------------------- | -------- | ------- | ------------------------------------------ |
+| **No secret key configured**  | `""`     | `false` | Warning logged, no retry                   |
+| **No contract ID configured** | `""`     | `false` | Warning logged, no retry                   |
+| **Simulation fails**          | `""`     | `false` | Error logged, ballot not recorded on-chain |
+| **Send fails (invalid tx)**   | `""`     | `false` | Error logged, transaction not submitted    |
+| **Timeout (>15 seconds)**     | `txHash` | `false` | Tx may have succeeded; check manually      |
+| **Success**                   | `txHash` | `true`  | Transaction hash returned for audit trail  |
 
 #### What core Should Do on Failure
 
@@ -766,20 +796,20 @@ export interface SorobanInvokeResult {
 // In core's ballotEngine.ts
 async function recordBallotOnChain(ballotId: string, ballotIdHash: string) {
   const result = await sorobanRecordBallot(sorobanConfig, ballotIdHash);
-  
+
   if (!result.success) {
     // Option A: Retry with exponential backoff
     console.error(`[Ballot] Soroban record failed for ${ballotId}`);
     // Implement retry logic with jitter
-    
+
     // Option B: Continue without on-chain record (graceful degradation)
     // The ballot proceeds, but won't have on-chain audit trail
     // Note: This reduces verifiability — consider making it an error
-    
+
     // Option C: Fail the ballot creation (strict mode)
     throw new Error(`Failed to record ballot on-chain: ${ballotId}`);
   }
-  
+
   // Log transaction hash for verification
   console.log(`[Ballot] Recorded on-chain: tx ${result.txHash}`);
 }
@@ -823,6 +853,7 @@ Should output your public key without errors.
 The account has no XLM balance. Fund it:
 
 **Testnet:**
+
 ```bash
 curl "https://friendbot.stellar.org?addr=$(stellar keys show --public-key $STELLAR_SECRET_KEY)"
 ```
@@ -858,6 +889,7 @@ SOROBAN_CONTRACT_ID=CA7QYNF63GQ2TLRJJQ4P6OQQC7TSCIB3...
 #### "Simulation failed"
 
 Check that:
+
 - Contract ID exists on the target network
 - Admin address is correctly initialized
 - Input parameters are valid
@@ -871,6 +903,7 @@ Wait longer — Stellar may not have indexed it yet. Retry after 30 seconds.
 #### "Result hash mismatch"
 
 The tally on the results page does not match the on-chain hash. This indicates:
+
 - Results page data is corrupted or stale
 - On-chain data is corrupted or incorrect
 - **This is a critical error.** Contact AnonVote support immediately.
@@ -878,6 +911,7 @@ The tally on the results page does not match the on-chain hash. This indicates:
 #### "Horizon API returns 404"
 
 Transaction doesn't exist on the network. Verify:
+
 - Transaction ID is correct
 - You're querying the correct network (testnet vs mainnet)
 - Transaction has been mined (wait a few seconds)
@@ -892,10 +926,11 @@ With this guide, you can:
 ✓ Verify deployments are correct and match source code  
 ✓ Configure the TypeScript service in core  
 ✓ Query and verify election results directly from Stellar without trusting AnonVote's servers  
-✓ Handle network failures gracefully  
+✓ Handle network failures gracefully
 
 For issues or questions, refer to:
-- [AnonVote/protocol](https://github.com/AnonVote/protocol) — specification
+
+- [AnonVote/docs](https://github.com/AnonVote/docs) — specification
 - [AnonVote/contracts](https://github.com/AnonVote/contracts) — contract source code
 - [Stellar documentation](https://developers.stellar.org/) — Soroban and Horizon reference
 - [Stellar community Discord](https://stellar.org/community) — technical support
